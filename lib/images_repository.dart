@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'match_images_model.dart';
+import 'models/match_images_model.dart';
 
 class ImagesRepository{
   final List<MatchImagesModel> _imagesOfAnimals = [

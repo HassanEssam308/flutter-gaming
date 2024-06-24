@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import '../models/images_repository.dart';
+import '../images_repository.dart';
 import '../models/match_images_model.dart';
 import '../widgets/count_up_timer.dart';
 import '../widgets/widget_question_mark.dart';
@@ -10,15 +10,13 @@ class MatchingImagesGameScreen extends StatefulWidget {
   const MatchingImagesGameScreen({super.key});
 
   @override
-  State<MatchingImagesGameScreen> createState() =>
-      _MatchingImagesGameScreenState();
+  State<MatchingImagesGameScreen> createState() => _MatchingImagesGameScreenState();
 }
 
 class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
   late List<MatchImagesModel> _cardImgs;
   late List<GlobalKey<FlipCardState>> _cardStateKeys;
   int matchesFound = 0;
-  String titleOfPage = "Match Images Game";
   bool isIgnoreClick = false;
   List<int> selectedIndices = [];
   bool _startTimer=false;
@@ -36,7 +34,6 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
   void _initializeGame() {
     _cardImgs = [];
     _cardStateKeys = [];
-    titleOfPage = "Match Images Game";
     matchesFound = 0;
     selectedIndices=[];
     isIgnoreClick = false;
@@ -46,69 +43,68 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
     tries=0;
     _cardStateKeys = ImagesRepository().getCardStateKeys();
     _cardImgs = ImagesRepository().getImagesForGame();
-    startGameAfterMilliseconds(10);
+    startGameAfterSeconds(3);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.teal,
-          title: Center(child: Text(titleOfPage)),
-        ),
-        body: finish
-            ?  youWin()
-            : IgnorePointer(
-                ignoring: isIgnoreClick,
-                child: playGame(),
-              ),
-      ),
+    return Container(
+      color: Colors.teal[200],
+      child: finish
+          ?  youWin()
+          : IgnorePointer(
+              ignoring: isIgnoreClick,
+              child: playGame(),
+            ),
     );
   }
 
   Widget youWin(){
-    return  Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return  Column(
       children: [
-        Card(
-          elevation: 10,
-          borderOnForeground:true,
-          margin:const EdgeInsets.all(20),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Congratulations ,You Win! \n '
-                    'After $tries Of Tries in $time Minutes ',
-                selectionColor: Colors.black,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              elevation: 5,
+              borderOnForeground:true,
+              margin:const EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Congratulations ,You Win! \n '
+                        'After $tries Of Tries in $time Minutes ',
+                    selectionColor: Colors.black,
 
-                style:  TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amberAccent[200],
+                    style:  TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amberAccent[200],
 
 
-                  ),),
+                      ),),
 
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _initializeGame();
-                        });
-                      },
-                      child: const Text("Play Again")
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _initializeGame();
+                            });
+                          },
+                          child: const Text("Play Again")
 
-                  ),
-                )
-              ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -130,7 +126,7 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
-                childAspectRatio:  1,
+                childAspectRatio:  1.5,
               ),
               itemBuilder: (context, index) {
                 return FlipCard(
@@ -167,11 +163,11 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
 
 
 
-  void startGameAfterMilliseconds(int milliseconds) async {
+  void startGameAfterSeconds(int seconds) async {
     setState(() {
       isIgnoreClick = true;
     });
-    await Future.delayed(Duration(seconds: milliseconds), () {
+    await Future.delayed(Duration(seconds: seconds), () {
       flipAllImages();
     });
   }
@@ -190,14 +186,12 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
   void flipAllImages() {
     for (int i = 0; i < _cardImgs.length; i++) {
       _cardImgs[i].isOpen = false;
-      setState(() {});
     }
-    titleOfPage = "Start Game";
-    setState(() {
+
       countUpTimer=CountUpTimer(startTimer: true,);
       isIgnoreClick = false;
       _startTimer=true;
-    });
+      if (mounted)  setState(() {});
   }
 
   Future<void> checkMatchImages(int index) async {
@@ -239,31 +233,11 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
       }
     }
   }
-  // void _showWinDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) => AlertDialog(
-  //       title: const Text('You Win!'),
-  //       content: const Text('Congratulations, you found all matches!'),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () {
-  //             // Navigator.of(context).pop();
-  //             setState(() {
-  //               _initializeGame();
-  //             });
-  //           },
-  //           child: const Text('Play Again'),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+
 
   void gameEnding() {
     time=countUpTimer!.counter;
     print('matchesFound$time');
-    titleOfPage="The Game Ended";
     _startTimer=false;
     isIgnoreClick=true;
     finish=true;

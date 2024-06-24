@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gaming/screens/matching_images_screen.dart';
-import 'package:flutter_gaming/widgets/count_up_timer.dart';
+import 'package:flutter_gaming/screens/home_page.dart';
 
 
-import 'dart:async';
-import 'package:flutter/material.dart';
+
+
 void main() {
   runApp(const MyApp());
 }
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MatchingImagesGameScreen()
+      home: HomePage(),
    );
   }
 }

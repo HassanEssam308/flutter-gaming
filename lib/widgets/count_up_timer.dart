@@ -1,52 +1,4 @@
-// import 'dart:async';
-// import 'package:flutter/material.dart';
-//
-// class CountUpTimer  {
-//
-//   late final Stopwatch _stopwatch =Stopwatch();
-//   late Timer _timer ;
-//   Duration _elapsed = Duration.zero;
-//   String _counter="";
-//
-//
-//   void startTimer() {
-//     _stopwatch.start();
-//     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-//       _elapsed = _stopwatch.elapsed;
-//     });
-//   }
-//
-//   void stopTimer() {
-//     print('_stopTimer$_elapsed');
-//     _stopwatch.stop();
-//     _timer.cancel();
-//     _elapsed = Duration.zero;
-//
-//   }
-//
-//
-//
-//   String  _formatDuration(Duration duration) {
-//     String twoDigits(int n) => n.toString().padLeft(2, '0');
-//
-//     return  _counter="${twoDigits(duration.inMinutes.remainder(60))}:"
-//         "${twoDigits(duration.inSeconds.remainder(60))}";
-//   }
-//   get theTime => _counter;
-//
-//   Widget counterWidget() {
-//     print('counterWidget ${_formatDuration(_elapsed)}');
-//     return Center(
-//       child: Text(
-//         _formatDuration(_elapsed),
-//         style: const TextStyle(fontSize: 20.0),
-//       ),
-//     );
-//   }
-//
-// }
 
-/////////////////////////////////
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -57,8 +9,15 @@ class CountUpTimer extends StatefulWidget {
   String counter='';
 get theCounter =>counter;
 
+ late CountUpTimerState countUpTimerState ;
+
   @override
-  State<CountUpTimer> createState() => CountUpTimerState();
+  State<StatefulWidget> createState() {
+    countUpTimerState = CountUpTimerState();
+    return countUpTimerState;
+  }
+  // @override
+  // State<CountUpTimer> createState() => CountUpTimerState();
 }
 
 class CountUpTimerState extends State<CountUpTimer> {
@@ -71,29 +30,32 @@ class CountUpTimerState extends State<CountUpTimer> {
   void initState() {
     super.initState();
     _stopwatch = Stopwatch();
-    print(widget.startTimer);
+    // print(widget.startTimer);
     if(widget.startTimer){
       _startTimer();
     }else{
       if(_timer!= null){
-        _stopTimer();
+        stopTimer();
       }
 
     }
   }
-
+  void restartTimer() {
+    stopTimer();
+    _stopwatch.reset();
+    _startTimer();
+  }
   void _startTimer() {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      print('_startTimer${widget.counter}');
+      print("startTimer$_elapsed");
       setState(() {
         _elapsed = _stopwatch.elapsed;
       });
     });
   }
 
-  void _stopTimer() {
-    print('_stopTimer${widget.counter}');
+  void stopTimer() {
       _timer?.cancel();
       _stopwatch.stop();
       _elapsed = Duration.zero;
@@ -122,6 +84,6 @@ String  _formatDuration(Duration duration) {
   @override
   void dispose() {
     super.dispose();
-    _stopTimer();
+    stopTimer();
   }
 }
