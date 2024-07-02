@@ -48,7 +48,7 @@ class CountUpTimerState extends State<CountUpTimer> {
   void _startTimer() {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      print("startTimer$_elapsed");
+      // print("startTimer$_elapsed");
       setState(() {
         _elapsed = _stopwatch.elapsed;
       });

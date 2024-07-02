@@ -237,7 +237,7 @@ class _MatchingImagesGameScreenState extends State<MatchingImagesGameScreen> {
 
   void gameEnding() {
     time=countUpTimer!.counter;
-    print('matchesFound$time');
+    // print('matchesFound$time');
     _startTimer=false;
     isIgnoreClick=true;
     finish=true;

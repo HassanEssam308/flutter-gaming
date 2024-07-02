@@ -38,6 +38,6 @@ class _DrawWordsState extends State<DrawWords> {
           );
         },
       ),
-    );;
+    );
   }
 }
